@@ -34,7 +34,7 @@ store.model({
 const createSend = store.start({ noSubscriptions: true })
 const send = createSend('myDispatcher', true)
 document.addEventListener('DOMContentLoaded', () => {
-  store.start()
+  store.start() // fire up subscriptions
   const state = store.state()
   send('foo:start', { name: 'Loki' })
 })
@@ -105,6 +105,11 @@ Start the store and get a `createSend(name)` function. Pass a unique `name` to
   starting the application. Useful when only wanting the initial `state`
 - __noFreeze:__ default: false. Don't freeze state in handlers using
   `Object.freeze()`. Useful for optimizing performance in production builds.
+
+If the store has started with `opts.no*`, calling `store.start()` a second time
+will register the remaining values. This is a useful if not everything can be
+started at the same time (e.g. have `subscriptions` wait for the
+`DOMContentLoaded` event).
 
 ### send(name, data?)
 Send a new action to the models with optional data attached. Namespaced models
